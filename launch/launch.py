@@ -21,7 +21,7 @@ def generate_launch_description():
     params = {'robot_description': robot_description_config}
 
     #GAZEBO
-    # gazebo_params_file = os.path.join(get_package_share_directory('baymax'),'config','gazebo_params.yaml')
+    gazebo_params_file = os.path.join(get_package_share_directory('baymax'),'config','gazebo_params.yaml')
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
                         arguments=['-topic', 'robot_description',
@@ -34,11 +34,25 @@ def generate_launch_description():
         )])
     )
 
+    rviz_config_file = os.path.join(get_package_share_directory('baymax'), 'config', 'baymax_config.rviz')
+
     return LaunchDescription([
         Node(
             package='robot_state_publisher',
             executable='robot_state_publisher',
             output='screen',
             parameters=[params]
-        )
+        ),
+        # Node(
+        #     package='rviz2',
+        #     executable='rviz2', 
+        #     name='rviz2',
+        #     parameters=['-d', rviz_config_file]
+        # ),
+        Node(
+            package='joint_state_publisher_gui',
+            executable='joint_state_publisher_gui',
+            output='screen'
+        ),
+        gazebo, spawn_entity
     ])
