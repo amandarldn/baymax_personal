@@ -14,21 +14,134 @@
         
     </link>
 
-    <joint name="chassis_joint" type="fixed">
-        <origin xyz="-0.1 0.0 0.0" rpy="0.0 0.0 0.0"/>
+    <link name="body">
+        <xacro:inertial_body mass="18" length="0.8" radius="0.2">
+            <origin xyz="0.0 0.0 0.4" rpy="0.0 0.0 0.0"/>
+        </xacro:inertial_body>
+        <visual>
+            <geometry>
+                <cylinder radius="${body_radius}" length="${body_height}"/>
+            </geometry>    
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${body_radius}" length="${body_height}"/>
+            </geometry> 
+        </collision>
+    </link>
+
+    <joint name="body_world_joint" type="fixed">
+        <origin xyz="0.0 0.0 ${body_height/2}" rpy="0.0 0.0 0.0"/>
         <parent link="world"/>
-        <child link="chassis"/>
-        <axis xyz="1 0.0 0.0"/>
+        <child link="body"/>
         <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
     </joint>
 
-    <link name="chassis">
+    <gazebo reference="body">
+        <material>Gazebo/White</material>
+    </gazebo>
+
+    <link name="left_wheel">
+        <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </xacro:inertial_body>
         <visual>
-            <origin xyz="0.15 0 0.075" rpy="0.0 0.0 0.0"/>
             <geometry>
-                <box size="0.3 0.3 0.15"/>
-            </geometry>
-            
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+            </geometry>  
         </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+            </geometry>  
+        </collision>
     </link>
+
+    <joint name="left_wheel_body_joint" type="continuous">
+        <origin xyz="-0.07 -0.215 -${body_height/2}" rpy="${pi/2} 0.0 0.0"/>
+        <parent link="body"/>
+        <child link="left_wheel"/>
+        <axis xyz="0.0 0.0 -1.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+    
+    <gazebo reference="left_wheel">
+        <material>Gazebo/Red</material>
+    </gazebo>
+    
+    <link name="right_wheel">
+        <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </xacro:inertial_body>
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+            </geometry>  
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+            </geometry>  
+        </collision>
+    </link>
+
+    <joint name="right_wheel_body_joint" type="continuous">
+        <origin xyz="-0.07 0.215 -${body_height/2}" rpy="-${pi/2} 0.0 0.0"/>
+        <parent link="body"/>
+        <child link="right_wheel"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <gazebo reference="right_wheel">
+        <material>Gazebo/Red</material>
+    </gazebo>
+
+    <link name="caster_wheel">
+        <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </xacro:inertial_body>
+        <visual>
+            <geometry>
+                <cylinder radius="${wheel_radius/2}" length="${wheel_thickness}"/>
+            </geometry>  
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${wheel_radius/2}" length="${wheel_thickness}"/>
+            </geometry>  
+        </collision>
+    </link>
+
+    <joint name="caster_wheel_body_joint" type="continuous">
+        <origin xyz="0.1 0.0 -${body_height/2 + wheel_radius/2}" rpy="-${pi/2} 0.0 0.0"/>
+        <parent link="body"/>
+        <child link="caster_wheel"/>
+        <axis xyz="0.0 0.0 1.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="head">
+        <xacro:inertial_body mass="1" length="0.1" radius="0.1">
+            <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        </xacro:inertial_body>
+        <visual>
+            <geometry>
+                <cylinder radius="${head_radius}" length="${head_height}"/>
+            </geometry>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="${head_radius}" length="${head_height}"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="head_body_joint" type="fixed">
+        <origin xyz="0.0 0.0 ${body_height/2 + head_height/2}" rpy="0.0 0.0 0.0"/>
+        <parent link="body"/>
+        <child link="head"/>
+        <axis xyz="0.0 0.0 0.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
 </robot>
