@@ -1,0 +1,34 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="baymax">
+
+    <xacro:include filename="inertial_macros.urdf.xacro"/>
+
+    <xacro:property name="wheel_radius" value="0.075"/>
+    <xacro:property name="body_height" value="0.8"/>
+    <xacro:property name="body_radius" value="0.2"/>
+    <xacro:property name="wheel_thickness" value="0.03"/>
+    <xacro:property name="head_radius" value="0.1"/>
+    <xacro:property name="head_height" value="0.1"/>
+
+    <link name="world">
+        
+    </link>
+
+    <joint name="chassis_joint" type="fixed">
+        <origin xyz="-0.1 0.0 0.0" rpy="0.0 0.0 0.0"/>
+        <parent link="world"/>
+        <child link="chassis"/>
+        <axis xyz="1 0.0 0.0"/>
+        <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <link name="chassis">
+        <visual>
+            <origin xyz="0.15 0 0.075" rpy="0.0 0.0 0.0"/>
+            <geometry>
+                <box size="0.3 0.3 0.15"/>
+            </geometry>
+            
+        </visual>
+    </link>
+</robot>
