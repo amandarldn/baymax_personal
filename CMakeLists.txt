@@ -10,6 +10,16 @@ find_package(ament_cmake REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+
+add_executable(teleop_joy src/teleop_joy.cpp)
+ament_target_dependencies(teleop_joy rclcpp sensor_msgs geometry_msgs)
+
+install(TARGETS
+teleop_joy
+  DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -23,7 +33,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
-install(DIRECTORY launch description config
+install(DIRECTORY launch description config src
   DESTINATION share/${PROJECT_NAME}
 )
 ament_package()

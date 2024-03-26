@@ -2,6 +2,8 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="baymax">
 
     <xacro:include filename="inertial_macros.urdf.xacro"/>
+    <xacro:include filename="gazebo_control.urdf.xacro"/>
+    <xacro:include filename="lidar.urdf.xacro"/>
 
     <xacro:property name="wheel_radius" value="0.075"/>
     <xacro:property name="body_height" value="0.8"/>
@@ -10,12 +12,12 @@
     <xacro:property name="head_radius" value="0.1"/>
     <xacro:property name="head_height" value="0.1"/>
 
-    <link name="world">
+    <!-- <link name="world">
         
-    </link>
+    </link> -->
 
     <link name="body">
-        <xacro:inertial_body mass="18" length="0.8" radius="0.2">
+        <xacro:inertial_body mass="1" length="0.8" radius="0.2">
             <origin xyz="0.0 0.0 0.4" rpy="0.0 0.0 0.0"/>
         </xacro:inertial_body>
         <visual>
@@ -30,16 +32,18 @@
         </collision>
     </link>
 
-    <joint name="body_world_joint" type="fixed">
-        <origin xyz="0.0 0.0 ${body_height/2}" rpy="0.0 0.0 0.0"/>
+    <!-- <joint name="body_world_joint" type="continuous">
+        <origin xyz="0.0 0.0 ${(body_height/2) + wheel_radius}" rpy="0.0 0.0 0.0"/>
         <parent link="world"/>
         <child link="body"/>
         <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
-    </joint>
+    </joint> -->
 
     <gazebo reference="body">
         <material>Gazebo/White</material>
     </gazebo>
+
+    
 
     <link name="left_wheel">
         <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
@@ -66,7 +70,7 @@
     </joint>
     
     <gazebo reference="left_wheel">
-        <material>Gazebo/Red</material>
+        <material>Gazebo/Black</material>
     </gazebo>
     
     <link name="right_wheel">
@@ -94,11 +98,11 @@
     </joint>
 
     <gazebo reference="right_wheel">
-        <material>Gazebo/Red</material>
+        <material>Gazebo/Black</material>
     </gazebo>
 
     <link name="caster_wheel">
-        <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
+        <xacro:inertial_body mass="0.1" length="${wheel_thickness}" radius="${wheel_radius}">
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         </xacro:inertial_body>
         <visual>
@@ -113,6 +117,15 @@
         </collision>
     </link>
 
+    <!-- Tirar o atrito da roda boba -->
+    <gazebo reference="caster_wheel">
+        <material>
+            Gazebo/Black
+        </material>
+        <mu1 value="0.1"/>
+        <mu2 value="0.1"/>
+    </gazebo>
+
     <joint name="caster_wheel_body_joint" type="continuous">
         <origin xyz="0.1 0.0 -${body_height/2 + wheel_radius/2}" rpy="-${pi/2} 0.0 0.0"/>
         <parent link="body"/>
@@ -122,7 +135,7 @@
     </joint>
 
     <link name="head">
-        <xacro:inertial_body mass="1" length="0.1" radius="0.1">
+        <xacro:inertial_body mass="0.05" length="0.1" radius="0.1">
             <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
         </xacro:inertial_body>
         <visual>

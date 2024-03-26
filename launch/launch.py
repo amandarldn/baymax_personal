@@ -11,7 +11,7 @@ import xacro
 
 def generate_launch_description():
 
-    # use_sim_time = LaunchConfiguration('use_sim_time')
+    use_sim_time = LaunchConfiguration('use_sim_time')
  
     pkg_path = os.path.join(get_package_share_directory('baymax'))
    
@@ -21,12 +21,11 @@ def generate_launch_description():
     params = {'robot_description': robot_description_config}
 
     #GAZEBO
-    gazebo_params_file = os.path.join(get_package_share_directory('baymax'),'config','gazebo_params.yaml')
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                        arguments=['-topic', 'robot_description',
-                                   '-entity', 'baymax'],
-                        output='screen')
+        arguments=['-topic', 'robot_description',
+                    '-entity', 'baymax'],
+                    output='screen')
 
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -43,16 +42,27 @@ def generate_launch_description():
             output='screen',
             parameters=[params]
         ),
+        Node(
+            package="baymax",
+            executable="teleop_joy",
+            name="teleop_joy",
+            output="screen"
+        ),
+        Node(
+            package="joy",
+            executable="joy_node",
+            name="joy_node",
+            output="screen"
+        ),
         # Node(
         #     package='rviz2',
         #     executable='rviz2', 
-        #     name='rviz2',
-        #     parameters=['-d', rviz_config_file]
+        #     name='rviz2'
         # ),
-        Node(
-            package='joint_state_publisher_gui',
-            executable='joint_state_publisher_gui',
-            output='screen'
-        ),
+        # Node(
+        #     package='joint_state_publisher_gui',
+        #     executable='joint_state_publisher_gui',
+        #     output='screen'
+        # ),
         gazebo, spawn_entity
     ])
