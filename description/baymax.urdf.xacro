@@ -4,6 +4,7 @@
     <xacro:include filename="inertial_macros.urdf.xacro"/>
     <xacro:include filename="gazebo_control.urdf.xacro"/>
     <xacro:include filename="lidar.urdf.xacro"/>
+    <xacro:include filename="camera.urdf.xacro"/>
 
     <xacro:property name="wheel_radius" value="0.075"/>
     <xacro:property name="body_height" value="0.8"/>
@@ -42,8 +43,6 @@
     <gazebo reference="body">
         <material>Gazebo/White</material>
     </gazebo>
-
-    
 
     <link name="left_wheel">
         <xacro:inertial_body mass="0.1" length="0.03" radius="0.075">
