@@ -2,14 +2,14 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="baymax">
 
     <xacro:include filename="inertial_macros.urdf.xacro"/>
-    <xacro:include filename="gazebo_control.urdf.xacro"/>
+    <xacro:include filename="ros2_control.xacro"/>
     <xacro:include filename="lidar.urdf.xacro"/>
-    <xacro:include filename="camera.urdf.xacro"/>
+    <xacro:include filename="depth_camera.xacro"/>
 
     <xacro:property name="wheel_radius" value="0.075"/>
     <xacro:property name="body_height" value="0.8"/>
     <xacro:property name="body_radius" value="0.2"/>
-    <xacro:property name="wheel_thickness" value="0.03"/>
+    <xacro:property name="wheel_thickness" value="0.05"/>
     <xacro:property name="head_radius" value="0.1"/>
     <xacro:property name="head_height" value="0.1"/>
 
@@ -55,13 +55,13 @@
         </visual>
         <collision>
             <geometry>
-                <cylinder radius="${wheel_radius}" length="${wheel_thickness}"/>
+                <cylinder radius="${wheel_radius}" length="${wheel_thickness - 0.02}"/>
             </geometry>  
         </collision>
     </link>
 
     <joint name="left_wheel_body_joint" type="continuous">
-        <origin xyz="-0.07 -0.215 -${body_height/2}" rpy="${pi/2} 0.0 0.0"/>
+        <origin xyz="-0.07 -0.22 -${body_height/2}" rpy="${pi/2} 0.0 0.0"/>
         <parent link="body"/>
         <child link="left_wheel"/>
         <axis xyz="0.0 0.0 -1.0"/>
@@ -89,7 +89,7 @@
     </link>
 
     <joint name="right_wheel_body_joint" type="continuous">
-        <origin xyz="-0.07 0.215 -${body_height/2}" rpy="-${pi/2} 0.0 0.0"/>
+        <origin xyz="-0.07 0.22 -${body_height/2}" rpy="-${pi/2} 0.0 0.0"/>
         <parent link="body"/>
         <child link="right_wheel"/>
         <axis xyz="0.0 0.0 1.0"/>

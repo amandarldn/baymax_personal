@@ -33,6 +33,20 @@ def generate_launch_description():
         )])
     )
 
+    #CONTROLLER_MANAGER
+
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["diff_cont"]
+    )
+
+    joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner.py",
+        arguments=["joint_broad"]
+    )
+
     rviz_config_file = os.path.join(get_package_share_directory('baymax'), 'config', 'baymax_config.rviz')
 
     return LaunchDescription([
@@ -54,6 +68,7 @@ def generate_launch_description():
             name="joy_node",
             output="screen"
         ),
+        
         # Node(
         #     package='rviz2',
         #     executable='rviz2', 
@@ -64,5 +79,5 @@ def generate_launch_description():
         #     executable='joint_state_publisher_gui',
         #     output='screen'
         # ),
-        gazebo, spawn_entity
+        gazebo, spawn_entity, diff_drive_spawner, joint_broad_spawner
     ])
