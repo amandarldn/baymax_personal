@@ -4,7 +4,10 @@
     <xacro:include filename="inertial_macros.urdf.xacro"/>
     <xacro:include filename="ros2_control.xacro"/>
     <xacro:include filename="lidar.urdf.xacro"/>
-    <xacro:include filename="depth_camera.xacro"/>
+    <!--Ainda n implementada completamente 
+    <xacro:include filename="depth_camera.xacro"/> 
+    -->
+    <xacro:include filename="imu.urdf.xacro"/>
 
     <xacro:property name="wheel_radius" value="0.075"/>
     <xacro:property name="body_height" value="0.8"/>
@@ -33,7 +36,7 @@
         </collision>
     </link>
 
-    <!-- <joint name="body_world_joint" type="continuous">
+    <!-- <joint name="body_world_joint" type="fixed">
         <origin xyz="0.0 0.0 ${(body_height/2) + wheel_radius}" rpy="0.0 0.0 0.0"/>
         <parent link="world"/>
         <child link="body"/>
